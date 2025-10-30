@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  server:
+    build: ./server
+    command: npm run dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - CLIENT_URL=http://localhost:3000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+  client:
+    build: ./client
+    command: npm run dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:
