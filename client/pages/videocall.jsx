@@ -9,7 +9,7 @@ import api from '../lib/api';
 export default function VideoCallPage() {
   const router = useRouter();
   const { socket } = useSocket();
-  const { loading: authLoading, isAuthenticated, user } = useRequireAuth();
+  const { loading: authLoading, isAuthenticated } = useRequireAuth();
   const { localVideoRef, remoteVideoRef, inCall, callTarget, endCall, toggles } = useWebRTC();
   const [incomingCall, setIncomingCall] = useState(null);
   const [callState, setCallState] = useState('idle');

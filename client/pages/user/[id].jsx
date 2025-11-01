@@ -14,11 +14,6 @@ export default function UserProfilePage() {
   const [showUpvoteForm, setShowUpvoteForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (!isAuthenticated || !id) return;
-    fetchUserProfile();
-  }, [id, isAuthenticated]);
-
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
@@ -30,6 +25,11 @@ export default function UserProfilePage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isAuthenticated || !id) return;
+    fetchUserProfile();
+  }, [id, isAuthenticated, fetchUserProfile]);
 
   const handleUpvote = async () => {
     if (!upvoteComment.trim()) return;
