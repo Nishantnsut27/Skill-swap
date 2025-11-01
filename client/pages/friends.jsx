@@ -201,17 +201,19 @@ export default function FriendsPage() {
 
         {searchResults.length > 0 && (
           <div className="mt-4 space-y-3">
-            {searchResults.map((result) => (
+            {searchResults.map((result) => {
+              if (!result || !result.user) return null;
+              return (
               <div key={result.user._id} className="rounded-xl border-2 border-slate-200 p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4">
                     <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-xl font-bold text-white shadow-lg">
-                      {result.user.name.charAt(0).toUpperCase()}
+                      {result.user.name?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-bold text-slate-900">{result.user.name}</h3>
-                      <p className="text-sm text-slate-500">@{result.user.userId}</p>
-                      <p className="text-xs text-slate-400">{result.user.email}</p>
+                      <h3 className="text-lg font-bold text-slate-900">{result.user.name || 'Unknown'}</h3>
+                      <p className="text-sm text-slate-500">@{result.user.userId || 'unknown'}</p>
+                      <p className="text-xs text-slate-400">{result.user.email || ''}</p>
                       {result.user.bio && (
                         <p className="mt-2 text-sm text-slate-600">{result.user.bio}</p>
                       )}
@@ -253,7 +255,8 @@ export default function FriendsPage() {
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
