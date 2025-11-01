@@ -21,6 +21,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
+      'http://localhost:3001',
       'https://skill-swap-alpha-ruddy.vercel.app'
     ],
     credentials: true,

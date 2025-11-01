@@ -9,11 +9,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const syncUser = useCallback(async () => {
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!storedToken) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const response = await api.get('/auth/me');
       setUser(response.data);
-    } catch {
+    } catch (error) {
+      console.error('Failed to sync user:', error);
       api.clearToken();
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+      }
       setToken(null);
       setUser(null);
     } finally {
@@ -26,8 +36,10 @@ export function AuthProvider({ children }) {
     if (stored) {
       api.setToken(stored);
       setToken(stored);
+      syncUser();
+    } else {
+      setLoading(false);
     }
-    syncUser();
   }, [syncUser]);
 
   const login = useCallback(async (payload) => {

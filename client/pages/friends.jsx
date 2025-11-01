@@ -95,7 +95,11 @@ export default function FriendsPage() {
         setSearchError('No users found');
       }
     } catch (error) {
-      setSearchError(error.response?.data?.message || 'Search failed');
+      if (error.response?.status === 401) {
+        setSearchError('Please log in to search for users');
+      } else {
+        setSearchError(error.response?.data?.message || 'Search failed');
+      }
     } finally {
       setSearching(false);
     }
@@ -172,6 +176,8 @@ export default function FriendsPage() {
         <form onSubmit={handleSearch} className="flex gap-3">
           <input
             type="text"
+            name="search"
+            id="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by User ID, email, or name"
