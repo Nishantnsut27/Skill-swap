@@ -46,10 +46,38 @@ export const searchUsers = asyncHandler(async (req, res) => {
     ],
     _id: { $ne: req.user._id }
   })
-  .select('name email userId skills interests avatar')
+  .select('name email userId skills interests bio avatar')
   .limit(20);
 
-  res.json(users);
+  const FriendRequest = (await import('../models/FriendRequest.js')).FriendRequest;
+  const currentUser = await User.findById(req.user._id);
+  
+  const results = await Promise.all(users.map(async (user) => {
+    const isFriend = currentUser.friends.some(
+      friendId => friendId.toString() === user._id.toString()
+    );
+
+    const sentRequest = await FriendRequest.findOne({
+      from: req.user._id,
+      to: user._id,
+      status: 'pending'
+    });
+
+    const receivedRequest = await FriendRequest.findOne({
+      from: user._id,
+      to: req.user._id,
+      status: 'pending'
+    });
+
+    return {
+      user: user.toObject(),
+      isFriend,
+      requestStatus: sentRequest ? 'pending' : receivedRequest ? 'pending' : null,
+      requestDirection: sentRequest ? 'sent' : receivedRequest ? 'received' : null
+    };
+  }));
+
+  res.json(results);
 });
 
 export const getUserById = asyncHandler(async (req, res) => {
