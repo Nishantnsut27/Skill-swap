@@ -2,7 +2,11 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/profile": "pages/profile.js",
-  "/dashboard": "pages/dashboard.js",
-  "/messages": "pages/messages.js"
+  "/messages": "pages/messages.js",
+  "/user/[id]": "pages/user/[id].js",
+  "/": "pages/index.js",
+  "/friends": "pages/friends.js",
+  "/login": "pages/login.js",
+  "/register": "pages/register.js",
+  "/dashboard": "pages/dashboard.js"
 }
