@@ -16,7 +16,10 @@ const server = http.createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: true,
+    origin: [
+      'http://localhost:3000',
+      'https://skill-swap-alpha-ruddy.vercel.app'
+    ],
     credentials: true,
   },
 });
